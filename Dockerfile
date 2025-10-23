@@ -23,11 +23,14 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 # hadolint ignore=DL3006
 FROM debian:stable-slim
 COPY --from=builder /vnu-runtime-image /vnu-runtime-image
+
+ENV JAVA_TOOL_OPTIONS="-Xmx2G -Xms512M -Duser.language=es -Duser.country=ES -Dnu.validator.client.asciiquotes=yes"
 ENV LANG C.UTF-8
 ENV JAVA_TOOL_OPTIONS ""
 ENV CONNECTION_TIMEOUT_SECONDS 5
 ENV SOCKET_TIMEOUT_SECONDS 5
 ENV BIND_ADDRESS 0.0.0.0
 ENV PATH=/vnu-runtime-image/bin:$PATH
-EXPOSE 8888
-CMD ["./vnu-runtime-image/bin/java", "-m", "vnu/nu.validator.servlet.Main", "8888"]
+
+EXPOSE 8080
+CMD ["./vnu-runtime-image/bin/java", "-m", "vnu/nu.validator.servlet.Main", "8080"]
